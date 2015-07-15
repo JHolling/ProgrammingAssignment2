@@ -1,37 +1,46 @@
-## the makeCacheMatrix gets a "x" matrix and calls a function from cacheSolve
-## to return the inverted matrix of "x" if it exists. If inverted matrix doesn't exist,
-## create one from x and set it the to the cache. 
+## caachematrix.R can be used to allow one inverted matrix "cached" for use
+## for many calls and save time on not having to recalculate it.
+##
+## The makeCacheMatrix gets a matrix "m" and prepares it be to cached and utilizes
+## List objects/functions and variables in parent enviroments to care this out.
+##
+## The cacheSolve function checks if the inverted matrix exists. If not, it will invert the "m"
+## and pass it onward.
+##
+## function usasge:
+## m<-matrix(c(1,2,2,1),nrow=2,ncol=2)
+## matrix<-makeCacheMatrix(m)
+## cacheSolve(matrix) 
 
-makeCacheMatrix <- function(x, ...) 
-{
+makeCacheMatrix <- function(m = matrix())
+        {
         invert_mat <- NULL
         set <- function(y) 
         {                
-                x <<- y                          #assigning local variable to parent variables
+                m <<- y                          #assigning local variable to parent variables
                 invert_mat <<- NULL              #assinging NULL and Parent invert_mat variable 
         }
-        get <- function() x
+        get <- function() m
         setinverse <- function(solve) invert_mat <<- solve  
         getinverse <- function() invert_mat                 
         list(set = set, get = get,
-             setinverse = setinvers,
+             setinverse = setinverse,
              getinverse = getinverse)
 }
 
 
-## cacheSolve contains a set of List object/functions & variables in the parent enviroments to set/get 
-## and set/get inverse. These functions are called from makeCacheMatrix 
+## Checks to see if inverted matrix exist. If not, returns an newly inverted matrix m. 
 
-cacheSolve <- function(x = matrix()) 
+cacheSolve <- function(m, ...)  
 {
-        invert_mat <- x$getinverse()                   
+        invert_mat <- m$getinverse()                   
         if(!is.null(invert_mat))                     #checks if inverted matrix exists
         {
-                message("getting cached data")       #if yes, "getting cached data" and return
+                message("getting cached data")       
                 return(invert_mat)  
         }
-        data <- x$get()                              #if no, call fun get() to get local x "matrix
+        data <- m$get()                              #if no, call fun get() to get local x "matrix
         invert_mat <- solve(data, ...)               #run solve fun to invert the "x" matrix                   
-        x$setinverse(invert_mat)                     #updates newly inverted matrix
-        invert_mat                                   #shows what's in "invert_mat" and ends.
+        m$setinverse(invert_mat)                     #updates newly inverted matrix
+        invert_mat                                   
 }
