@@ -1,36 +1,37 @@
-## calling makeCacheMatrix gets a "x" matrix and calls a function from cacheSolve
+## the makeCacheMatrix gets a "x" matrix and calls a function from cacheSolve
 ## to return the inverted matrix of "x" if it exists. If inverted matrix doesn't exist,
 ## create one from x and set it the to the cache. 
 
-makeCacheMatrix <- function(x = matrix()) {
-        invert_mat <- x$getinverse()                   #gets any cached inverted matrix and sets to local "im" 
-        if(!is.null(invert_mat))                       #checks if "im" exists or not
-        {
-                message("getting cached data") 
-                return(invert_mat)                     #leave fun cacheSolve with existing "im" inverted matrix
-        }
-        data <- x$get()            #if no "im" cached existing, call fun get() to get non-inverted x "matrix"
-        invert_mat <- solve(data, ...)     #run solve fun to Invert the matrix and place in "im" variable
-        x$setinverse(invert_mat)           #call setinverse() to set newly inverted matrix to parent "im"
-        invert_mat                         #send "im" to screen and end.
-
-}
-
-
-## cacheSolve contains sets List & parent enviroment variables and several functions to set/get 
-#and set/get inverse. These functions are called from makeCacheMatrix 
-
-
-cacheSolve <- function(x, ...) {
+makeCacheMatrix <- function(x, ...) 
+{
         invert_mat <- NULL
-        set <- function(y) {                
-                x <<- y                            #assigning variable to parent
-                invert_mat <<- NULL                        #assinging variable to NULL and Parent
+        set <- function(y) 
+        {                
+                x <<- y                          #assigning local variable to parent variables
+                invert_mat <<- NULL              #assinging NULL and Parent invert_mat variable 
         }
         get <- function() x
-        setinverse <- function(solve) invert_mat <<- solve  #calling to invert matrix 
-        getinverse <- function() invert_mat                 # invert matrix
+        setinverse <- function(solve) invert_mat <<- solve  
+        getinverse <- function() invert_mat                 
         list(set = set, get = get,
              setinverse = setinvers,
              getinverse = getinverse)
+}
+
+
+## cacheSolve contains a set of List object/functions & variables in the parent enviroments to set/get 
+## and set/get inverse. These functions are called from makeCacheMatrix 
+
+cacheSolve <- function(x = matrix()) 
+{
+        invert_mat <- x$getinverse()                   
+        if(!is.null(invert_mat))                     #checks if inverted matrix exists
+        {
+                message("getting cached data")       #if yes, "getting cached data" and return
+                return(invert_mat)  
+        }
+        data <- x$get()                              #if no, call fun get() to get local x "matrix
+        invert_mat <- solve(data, ...)               #run solve fun to invert the "x" matrix                   
+        x$setinverse(invert_mat)                     #updates newly inverted matrix
+        invert_mat                                   #shows what's in "invert_mat" and ends.
 }
