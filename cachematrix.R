@@ -1,11 +1,13 @@
-## caachematrix.R can be used to allow one inverted matrix "cached" for use
-## for many calls and save time on not having to recalculate it.
+## cachematrix.R can be used to allow one inverted matrix "cached" for use
+## on many calls and save time on not having to recalculate it.
 ##
-## The makeCacheMatrix gets a matrix "m" and prepares it be to cached and utilizes
-## List objects/functions and variables in parent enviroments to care this out.
+## The makeCacheMatrix, gets a matrix "m" and defines a special List of objects/functions to 
+## read & write the current matrix as well as read & write the existing inverted matrix (if any).
 ##
-## The cacheSolve function checks if the inverted matrix exists. If not, it will invert the "m"
-## and pass it onward.
+## The cacheSolve function takes the matrix from makeCacheMatrix, and uses several 
+## functions from the above Special List of Objects/functions to determing if the inverted
+## matrix already exists. If not, it will invert the "m" with an R function 
+## called "Solve" and set it as the new cached inverted matrix.
 ##
 ## function usasge:
 ## m<-matrix(c(1,2,2,1),nrow=2,ncol=2)
@@ -18,7 +20,7 @@ makeCacheMatrix <- function(m = matrix())
         set <- function(y) 
         {                
                 m <<- y                          #assigning local variable to parent variables
-                invert_mat <<- NULL              #assinging NULL and Parent invert_mat variable 
+                invert_mat <<- NULL               
         }
         get <- function() m
         setinverse <- function(solve) invert_mat <<- solve  
@@ -29,7 +31,7 @@ makeCacheMatrix <- function(m = matrix())
 }
 
 
-## Checks to see if inverted matrix exist. If not, returns an newly inverted matrix m. 
+## Checks to see if inverted matrix exist. If not, sets & returns an newly inverted matrix m. 
 
 cacheSolve <- function(m, ...)  
 {
@@ -39,8 +41,8 @@ cacheSolve <- function(m, ...)
                 message("getting cached data")       
                 return(invert_mat)  
         }
-        data <- m$get()                              #if no, call fun get() to get local x "matrix
-        invert_mat <- solve(data, ...)               #run solve fun to invert the "x" matrix                   
-        m$setinverse(invert_mat)                     #updates newly inverted matrix
+        data <- m$get()                              #if no, call get() to get local m "matrix
+        invert_mat <- solve(data, ...)               #and run solve to invert it.                   
+        m$setinverse(invert_mat)                     
         invert_mat                                   
 }
