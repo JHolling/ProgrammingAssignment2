@@ -14,15 +14,15 @@
 ## matrix<-makeCacheMatrix(m)
 ## cacheSolve(matrix) 
 
-makeCacheMatrix <- function(m = matrix())
+makeCacheMatrix <- function(x = matrix())
         {
         invert_mat <- NULL
         set <- function(y) 
         {                
-                m <<- y                          #assigning local variable to parent variables
+                x <<- y                          #assigning local variable to parent variables
                 invert_mat <<- NULL               
         }
-        get <- function() m
+        get <- function() x
         setinverse <- function(solve) invert_mat <<- solve  
         getinverse <- function() invert_mat                 
         list(set = set, get = get,
@@ -33,16 +33,16 @@ makeCacheMatrix <- function(m = matrix())
 
 ## Checks to see if inverted matrix exist. If not, sets & returns an newly inverted matrix m. 
 
-cacheSolve <- function(m, ...)  
+cacheSolve <- function(x, ...)  
 {
-        invert_mat <- m$getinverse()                   
+        invert_mat <- x$getinverse()                   
         if(!is.null(invert_mat))                     #checks if inverted matrix exists
         {
                 message("getting cached data")       
                 return(invert_mat)  
         }
-        data <- m$get()                              #if no, call get() to get local m "matrix
+        data <- x$get()                              #if no, call get() to get local x "matrix
         invert_mat <- solve(data, ...)               #and run solve to invert it.                   
-        m$setinverse(invert_mat)                     
+        x$setinverse(invert_mat)                     
         invert_mat                                   
 }
