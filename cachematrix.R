@@ -1,12 +1,13 @@
 ## cachematrix.R can be used to allow one inverted matrix "cached" for use
 ## on many calls and save time on not having to recalculate it.
 ##
-## The makeCacheMatrix, gets a matrix "m" and defines a special List of objects/functions to 
-## read & write the current matrix as well as read & write the existing inverted matrix (if any).
+## The makeCacheMatrix function, gets a matrix "x", sets it to a variable, and defines
+## a special List of objects/functions to read & write the current matrix as well 
+## as read & write the existing inverted matrix (if any).
 ##
 ## The cacheSolve function takes the matrix from makeCacheMatrix, and uses several 
 ## functions from the above Special List of Objects/functions to determing if the inverted
-## matrix already exists. If not, it will invert the "m" with an R function 
+## matrix already exists. If not, it will invert the "x" with an R function 
 ## called "Solve" and set it as the new cached inverted matrix.
 ##
 ## function usasge:
